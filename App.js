@@ -8,14 +8,21 @@
 //Bình Luận như thế này
 
 import React, {useState} from 'react';
-import {Button,
+import {Alert, Button,
   FlatList, 
+  Modal, 
+  Pressable, 
   RefreshControl, 
   ScrollView, 
   ScrollViewBase, 
   SectionList, 
   StyleSheet, 
   Text, 
+  TextInput, 
+  ToastAndroid, 
+  TouchableHighlight, 
+  TouchableOpacity, 
+  TouchableWithoutFeedback, 
   View
 } from 'react-native';
 
@@ -26,130 +33,117 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { styles } from './Styles';
 
 
 const App = () => {
-  const [Items, setItems] = useState([
-    {key:1, name: 'Item 1'},
-    {key:2, name: 'Item 2'},
-    {key:3, name: 'Item 3'},
-    {key:4, name: 'Item 4'},
-    {key:5, name: 'Item 5'},
-    {key:6, name: 'Item 6'},
-    {key:7, name: 'Item 7'},
-    {key:8, name: 'Item 8'},
-    {key:9, name: 'Item 9'},
-    {key:10, name: 'Item 10'},
-    {key:11, name: 'Item 11'},
-    {key:12, name: 'Item 12'},
-    {key:13, name: 'Item 13'},
-    {key:14, name: 'Item 14'},
-    {key:15, name: 'Item 15'},  
-  ])
-  const DATA = [
-    {
-      title:'Title 1',
-      data: ['Item 1-1', 'Item 1-2']
-    },
-    {
-      title:'Title 2',
-      data: ['Item 2-1', 'Item 2-2', 'Item 2-3']
-    },
-    {
-      title:'Title 3',
-      data: ['Item 3-1', 'Item 3-2']
-    },
-    {
-      title:'Title 4',
-      data: ['Item 4-1', 'Item 4-2']
-    },
-  ]
-  const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    setItems([...Items, {key: 17, name: 'Item 69'}])
-    setRefreshing(false);
+  const [name, setName] = useState('');
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const onPressHandler = () => {
+    if(name.length> 3) {
+      setSubmitted(!submitted);
+    }
+    else {
+      // Alert.alert('Cảnh báo', 'Tên của bạn quá ngắn',
+      //   [
+      //     {text: 'Ok',onPress: () => console.warn('Nguy hiểm'), style: 'cancel' },
+      //     {text: 'Hủy',onPress: () => console.warn('Nguy hiểm'), style: 'cancel' },
+      //     {text: 'Sau',onPress: () => console.warn('Nguy hiểm'), style: 'destructive' },
+      //   ],{
+      //     cancelable: true,
+      //     onDismiss: () => console.warn('Warring của cancelable')
+      //   });
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Tên ngắn hơn 3 kí tự',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.TOP,
+      //   -200,
+      //   100
+      // )
+      setModalVisible(!modalVisible );
+    }
+    
   }
   return (
-    <View>
-      <SectionList
-        keyExtractor={(item, index) => index.toString()}
-        sections={DATA}
-        renderItem={({item}) => (
-          <View style={styles.item}>
-            <Text style={styles.text}> {item}</Text>
-          </View>
-        )}
-        renderSectionHeader={({section: {title}}) => (
-          <View>
-            <Text style= {styles.sectionTitle}>{title}</Text>
-          </View>
-        )}
-      />
-      <FlatList 
-        keyExtractor={(item, index) => index.toString()}
-        data={Items}
-        renderItem={({item}) => (
-          <View style={styles.item}>
-            <Text style={styles.text}> {item.name}</Text>
-          </View>
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#ff00ff']}
-          />
-        }
-      />
-      <ScrollView 
-      // cái quay quay tron tròn
-        refreshControl={
-          <RefreshControl refreshing ={refreshing}
-          onRefresh= {onRefresh}
-          colors={['#ff00ff']}
-        />} 
-        style={styles.body}
+    <View style={styles.body}>
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose= {() => setModalVisible(false)}
+        animationType='slide'
+        hardwareAccelerated
       >
-        {
-          Items.map((object) => {
-            return (
-              <View style={styles.item} key= {object.key}>
-                <Text style={styles.text}> {object.item}</Text>
-              </View>
-            )
-          })
-        }
-      </ScrollView>
+        <View style={styles.centered_view}>
+          <View style={styles.warning_modal}>
+            <View style= {styles.warning_title}>
+              <Text style={styles.text}>WARNING!</Text>
+            </View>
+
+            <View style={styles.warning_body}>
+              <Text style={styles.text}>Tên quá ngắn</Text>
+            </View>
+
+            <Pressable
+              onPress={() => setModalVisible(!modalVisible)}
+              style= {styles.warning_button}
+              android_ripple={{Colors: '#fff'}}
+            >
+              <Text style={styles.text}>Ok</Text>
+            </Pressable>
+            
+          </View>
+        </View>
+      </Modal>
+      <Text style={styles.text}>
+        Vui lòng nhập tên của bạn: 
+      </Text>
+      <TextInput
+      // nhiều dòng
+        multiline = {true}
+        style={styles.input}
+        placeholder='vd: Nhập họ tên'
+        onChangeText={(value) => setName(value)}
+        keyboardType={'default'}
+        maxLength={30}
+        editable={true}
+      />
+      
+      {/* <TouchableWithoutFeedback
+        onPress={onPressHandler}
+      >
+        <View style= {styles.button}>
+          <Text style = {styles.text}>
+            {submitted? 'Gửi đi' : 'Xóa'}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback> */}
+      <Pressable
+        onLongPress={onPressHandler}
+        delayLongPress={500}
+        hitSlop= {{bottom: 10, left: 10, right: 10, top: 10}}
+        android_ripple={{color: '#00f'}}
+        style = {({pressed}) => [
+          {backgroundColor: pressed? '#dddddd': '#00ff00'},
+          styles.button
+        ]}
+      >
+        <Text style = {styles.text}>
+          {submitted ? 'Gửi đi' : 'Xóa'}
+        </Text>
+      </Pressable>
+      {
+        submitted ? 
+          <Text style={styles.text}>Tên là : {name}</Text>
+          : null
+      }
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  body: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    backgroundColor: '#ffffff'
-  },
-  item: {
-    margin: 10,
-    backgroundColor: '#00ffff',
-    justifyContent: 'center',
-    alignItems: 'center'
 
-  },
-  text: {
-    color: '#000000',
-    fontSize: 45,
-    fontStyle:'italic',
-    margin: 10
-  },
-  sectionTitle: {
-    marginLeft:'40%',
-    color: '#000000',
-    fontSize: 30,
-    fontWeight:'bold'
-  }
-});
 
 export default App;
