@@ -4,7 +4,6 @@ export const styles = StyleSheet.create({
     body: {
       flexGrow: 1,
       flexDirection: 'column',
-      backgroundColor: '#ffffff',
       alignItems:'center'
     },
     item: {
@@ -70,6 +69,10 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       borderBottomLeftRadius:20,
       borderBottomRightRadius:20,
-
+    },
+    image: {
+      width: 100,
+      height: 100,
+      margin: 10
     }
   });

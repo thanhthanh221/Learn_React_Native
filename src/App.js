@@ -23,17 +23,20 @@ import {Alert, Button,
   TouchableHighlight, 
   TouchableOpacity, 
   TouchableWithoutFeedback, 
-  View
+  View,
+  Image,
+  ImageBackground,
 } from 'react-native';
 
 import {
   Colors,
   DebugInstructions,
-  Header,
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { styles } from './Styles';
+import MashButton from './CustomButton';
+import { styles } from '../Styles/Styles';
+import Header from './Header'
 
 
 const App = () => {
@@ -69,7 +72,10 @@ const App = () => {
     
   }
   return (
-    <View style={styles.body}>
+    <ImageBackground 
+      source={{uri: 'https://png.pngtree.com/thumb_back/fh260/back_our/20190614/ourmid/pngtree-fresh-and-simple-h5-background-app-guide-page-design-background-download-image_121781.jpg'}} 
+      style={styles.body}>
+        <Header />
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -103,7 +109,6 @@ const App = () => {
       </Text>
       <TextInput
       // nhiều dòng
-        multiline = {true}
         style={styles.input}
         placeholder='vd: Nhập họ tên'
         onChangeText={(value) => setName(value)}
@@ -121,26 +126,38 @@ const App = () => {
           </Text>
         </View>
       </TouchableWithoutFeedback> */}
-      <Pressable
-        onLongPress={onPressHandler}
-        delayLongPress={500}
-        hitSlop= {{bottom: 10, left: 10, right: 10, top: 10}}
-        android_ripple={{color: '#00f'}}
-        style = {({pressed}) => [
-          {backgroundColor: pressed? '#dddddd': '#00ff00'},
-          styles.button
-        ]}
-      >
-        <Text style = {styles.text}>
-          {submitted ? 'Gửi đi' : 'Xóa'}
-        </Text>
-      </Pressable>
+      <MashButton
+        onPressHandler = {onPressHandler}
+        title = {submitted ? 'Clear' : 'Submit'}
+        color= {'#00ff00'}
+      />
+      <MashButton
+        onPressHandler = {onPressHandler}
+        title = {'Test'}
+        color= {'#ff00ff'}
+        style= {{margin: 10}}
+      />
+      
       {
-        submitted ? 
-          <Text style={styles.text}>Tên là : {name}</Text>
-          : null
+        submitted ?
+          <View style={styles.body}> 
+            <Text style={styles.text}>
+                Tên là : {name}
+              </Text>
+              <Image
+              resizeMode='cover'
+              style={styles.image} 
+              source={{uri: 'https://vioa.com.vn/wp-content/uploads/2020/08/done.png'}} 
+              />  
+          </View>
+          :
+          <Image
+            resizeMode='cover'
+            style={styles.image} 
+            source={{uri: 'https://i.pinimg.com/originals/97/96/e0/9796e0dff2ee66b1b8c529e61f8668fc.png'}} 
+            />
       }
-    </View>
+    </ImageBackground>
   );
 };
 
