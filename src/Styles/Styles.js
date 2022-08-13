@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
       fontSize: 25,
       fontStyle:'italic',
       margin: 10,
+      fontFamily: 'Roboto-MediumItalic'
     },
     button: {
       width: 200,

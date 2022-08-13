@@ -12,55 +12,63 @@ import { Text, View } from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {createDrawerNavigator} from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import HomeScreen from '../Screens/HomeScreen';
-import NotificationsScreen from '../Screens/NotificationsScreen';
-import ProfileScreen from '../Screens/ProfileScreen';
-import SettingsScreen from '../Screens/SettingsScreen';
+import HomeScreen from './Screens/HomeScreen';
+import NotificationsScreen from './Screens/NotificationsScreen';
+import ProfileScreen from './Screens/ProfileScreen';
+import SettingsScreen from './Screens/SettingsScreen';
 
-const Tab = createBottomTabNavigator(); 
+const Drawer = createDrawerNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'home-outline'
-                : 'ios-information-circle-outline';
-            } 
-            else if (route.name === 'Settings') {
-              iconName = focused ? 'settings-outline' : 'ios-list';
-            }
-            else if(route.name === 'Notifications') {
-              iconName = 'notifications-sharp'
-            }
-            else {
-              iconName ='person-sharp'
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#3399FF',
-          tabBarInactiveTintColor: '#888888',
-          tabBarShowLabel: true,
-          tabBarLabelStyle:{fontSize: 12},
-          tabBarStyle: {
-            height: 55
-          },
-        })}
+      <Drawer.Navigator
+        initialRouteName='Home'
+        screenOptions={{
+          drawerPosition:'left',
+          drawerType:'front',
+          swipeEdgeWidth:100,
+          drawerHideStatusBarOnOpen:false,
+          overlayColor: '#ff00ff',
+          headerTitleAlign:'center',
+          headerStyle:{
+            backgroundColor:'#00ff'
+          }
+          
+        }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} options={{tabBarBadge: 4}} />
-        <Tab.Screen name="Notifications" component={NotificationsScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+        <Drawer.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{
+            title: 'Home',
+            drawerIcon: ({focused}) => (
+              <Ionicons color={focused ? 'red': 'blue'} name="home-outline" size={20}></Ionicons>
+            )
+        }}
+        initialParams={{name: 'Quang'}}
+          />
+        <Drawer.Screen 
+          name="Notifications" 
+          component={NotificationsScreen}
+          options={{
+            title: 'Notification',
+            drawerIcon: ({focused}) => (
+              <Ionicons 
+                    color={focused ? 'red': 'blue'} 
+                    name="notifications-outline" 
+                    size={20}>
+              </Ionicons>
+            )
+          }}
+          initialParams={{ItemName: 'Bim bim', ItemId: '21'}}
+          />
+        <Drawer.Screen name="Profile" component={ProfileScreen} />
+        <Drawer.Screen name="Settings" component={SettingsScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   )
 };

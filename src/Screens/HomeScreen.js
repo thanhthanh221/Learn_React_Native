@@ -1,24 +1,26 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import GlobalStyle from '../Utils/GlobalStyle'
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation,route}) => {
   const onPressHandler = () => {
-    navigation.navigate('Notifications')
-
+    navigation.navigate('Notifications', {ItemName: 'Bim bim', ItemId: '12'})
 
   }
+  const {name} = route.params;
   return (
     <View style={styles.body}>
       <View style={styles.view__button}>
         <Pressable
-        onPress={onPressHandler}
-          style={styles.button}
+          onPress={onPressHandler}
+          style={[styles.button]}
           >
-          <Text>To Notifications</Text>
+          <Text style={GlobalStyle.ButtonText}>To Home</Text>
         </Pressable>
       </View>
-      <View style={styles.view__text}>
-        <Text style={styles.text}>HomeScreen</Text>
+      <View style={[styles.view__text, GlobalStyle.CustomFont]}>
+        <Text style={[styles.text, GlobalStyle.CustomFont]}>HomeScreen</Text>
+        <Text style={styles.text}>Xin Chào {name}</Text>
       </View>
     </View>
   )
@@ -31,7 +33,6 @@ const styles = StyleSheet.create({
     flex:1,
   },
   text: {
-    fontWeight:'bold',
     fontSize:30,
   },
   button: {

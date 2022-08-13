@@ -1,24 +1,17 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Button, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const NotificationsScreen = ({navigation}) => {
-  const onPressHandler = () => {
-    navigation.goBack()
+const NotificationsScreen = ({navigation, route}) => {
+  const {ItemName, ItemId} = route.params;
 
-
-  }
   return (
     <View style={styles.body}>
       <View style={styles.view__button}>
-        <Pressable
-        onPress={onPressHandler}
-          style={styles.button}
-          >
-          <Text>To Notifications</Text>
-        </Pressable>
       </View>
       <View style={styles.view__text}>
         <Text style={styles.text}>NotificationsScreen</Text>
+        <Text style= {styles.text}>{ItemName}</Text>
+        <Text style= {styles.text}>{ItemId}</Text>
       </View>
     </View>
   )
@@ -31,11 +24,11 @@ const styles = StyleSheet.create({
     flex:1,
   },
   text: {
-    fontWeight:'bold',
-    fontSize:30,
+    fontSize: 40,
+    fontFamily: 'Roboto-Medium'
   },
   button: {
-    backgroundColor:'#00ff',
+    backgroundColor:'#00ff00',
     borderRadius:20,
     width:150,
     alignItems:'center',
