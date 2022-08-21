@@ -19,8 +19,9 @@ import HomeScreen from './Screens/HomeScreen';
 import NotificationsScreen from './Screens/NotificationsScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import SettingsScreen from './Screens/SettingsScreen';
+import Map from './Screens/Map';
 import Login from './Screens/Login';
-import {Provider} from 'react-redux'
+import {Provider} from 'react-redux';
 import {Store} from './redux/store';
 
 const Tab = createBottomTabNavigator();
@@ -30,6 +31,7 @@ function App() {
     <Provider store={Store}>
       <NavigationContainer>
         <Tab.Navigator
+          initialRouteName='Login'
           screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
               let iconName;
@@ -40,8 +42,10 @@ function App() {
                 iconName = 'ios-list';
               } else if (route.name === 'Notifications') {
                 iconName = 'notifications-outline';
+              } else if (route.name === 'Login') {
+                iconName = 'user-outline';
               } else {
-                iconName = 'person-outline';
+                iconName = 'map-outline';
               }
 
               // You can return any component that you like here!
@@ -56,7 +60,16 @@ function App() {
             initialParams={{ItemName: 'Bim bim', ItemId: '21'}}
             component={NotificationsScreen}
           />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen
+            name="Map"
+            component={Map}
+            options={{headerShown: false}}
+            initialParams={{
+              city: 'Ha Noi',
+              latitude: 20.7380475,
+              longitude: 105.8933073,
+            }}
+          />
           <Tab.Screen
             name="Login"
             component={Login}

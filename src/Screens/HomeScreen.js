@@ -1,9 +1,16 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyle from '../Utils/GlobalStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import {FlatList} from 'react-native-gesture-handler';
+import PushNotification from 'react-native-push-notification';
 
 const HomeScreen = ({navigation, route}) => {
   const {name, age} = useSelector(state => state.userReducer);
@@ -13,20 +20,48 @@ const HomeScreen = ({navigation, route}) => {
     {
       country: 'United States',
       city: 'New York',
+      latitude: 40.6976701,
+      longitude: -74.2598701,
     },
     {
       country: 'Australia',
       city: 'Sydney',
+      latitude: -34.0889509,
+      longitude: 150.1197041,
     },
     {
       country: 'Germany',
       city: 'Berlin',
+      latitude: 52.5175949,
+      longitude: 13.4039885,
     },
     {
       country: 'France',
       city: 'Paris',
+      latitude: 48.8589466,
+      longitude: 2.2769951,
+    },
+    {
+      country: 'Viet Nam',
+      city: 'Ha Noi',
+      latitude: 20.7380475,
+      longitude: 105.8933073,
     },
   ];
+
+  const handleNotification = (item, index) => {
+    PushNotification.cancelAllLocalNotifications();
+
+    PushNotification.localNotification({
+      channelId: 'test-channel',
+      title: item.country,
+      message: 'Chào mừng bạn đến với ' + item.city,
+      bigText: 'Chào mừng bạn đến với ' + item.city +' Thành phố này đẹp quá -,-',
+      color: "red",
+      id: index,
+      largeIconUrl:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/220px-React-icon.svg.png'
+    });
+  };
 
   return (
     <View style={styles.body}>
@@ -39,10 +74,20 @@ const HomeScreen = ({navigation, route}) => {
           data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => (
-            <View style={styles.item}>
-              <Text style={styles.text}>{item.country}</Text>
-              <Text>{item.city}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Map', {
+                  city: item.city,
+                  longitude: item.longitude,
+                  latitude: item.latitude,
+                }),
+                  handleNotification(item, index);
+              }}>
+              <View style={styles.item}>
+                <Text style={styles.text}>{item.country}</Text>
+                <Text style={styles.city}>{item.city}</Text>
+              </View>
+            </TouchableOpacity>
           )}
         />
       </View>
@@ -58,7 +103,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   button: {
     backgroundColor: '#00ff00',
@@ -81,7 +126,10 @@ const styles = StyleSheet.create({
     width: 350,
     borderWidth: 1,
     height: 80,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  city: {
+    marginTop: 7,
   },
 });

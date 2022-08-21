@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import {setAge, setName} from '../redux/actions';
 import img from '../../assets/redux.png';
+import PushNotification from 'react-native-push-notification';
 
 const Login = ({navigation}) => {
   const {name, age} = useSelector(state => state.userReducer);
@@ -23,8 +24,17 @@ const Login = ({navigation}) => {
     } else {
       dispatch(setName(name));
       dispatch(setAge(age));
-      navigation.navigate('Home')
+      navigation.navigate('Home');
     }
+  };
+  useEffect(() => {
+    createChannels();
+  },[])
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: 'test-channel',
+      channelName: 'Test Channel',
+    });
   };
   return (
     <View style={styles.body}>
